@@ -1,7 +1,11 @@
-import Layout from '../../components/layout';
-const Portfolios = () => {
+import Layout from 'components/layout';
+
+const Portfolios = (props) => {
   return (
     <Layout>
+      {
+        props.data.map(e => <h1 key={e.id}>{e.name}</h1>)
+      }
       <div className="container">
         <section className="section-title">
           <div className="px-2">
@@ -55,5 +59,20 @@ const Portfolios = () => {
     </Layout>
   );
 };
+
+const apiCall = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve([{id: 1, name: "john"},{id: 2, name: "alex"},{id: 3, name: "andre"}])
+    }, 200);
+  })
+}
+
+Portfolios.getInitialProps = async () => {
+  const data = await apiCall();
+  return {
+    data
+  }
+}
 
 export default Portfolios;

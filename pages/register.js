@@ -1,8 +1,9 @@
+import Layout from 'components/layout';
 const Register = () => {
   return (
-    <div>
+    <Layout>
       Register page
-    </div>
+    </Layout>
   );
 };
 

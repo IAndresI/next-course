@@ -1,34 +1,23 @@
 import Layout from 'components/layout';
-import axios from 'axios';
 import Link from 'next/link';
-import { useState } from 'react';
+import {
+  useCreatePortfolio,
+  useUpdatePortfolio,
+  useDeletePortfolio,
+  useGetAllPortfolio} from '../../apollo/actions';
+import withApollo from '../../hoc/withApollo';
+import { getDataFromTree } from "@apollo/client/react/ssr";
 
-const Portfolios = ({portfolios}) => {
-  const [portf, setPortf] = useState(portfolios)
+const Portfolios = () => {
+  const { data } = useGetAllPortfolio();
 
-  const createPortfolio = async () => {
-    const newPortfolio = await fetchCreatePortfolio();
-    const newPortfolios = [...portf, newPortfolio];
-    setPortf(newPortfolios);
-  }
+  const [ updatePortfolio ] = useUpdatePortfolio();
 
-  const updatePortfolio = async (id) => {
-    const index = portf.findIndex(e => e._id === id);
-    const updatedPortfolio = await fetchUpdatePortfolio(id);
-    const updated = [...portf]
-    updated[index] = {...portf[index], ...updatedPortfolio}
-    setPortf(updated);
-  }
+  const [ deletePortfolio ] = useDeletePortfolio();
 
-  const deletePortfolio = async (id) => {
-    const index = portf.findIndex(e => e._id === id);
-    const deleted = await fetchDeletePortfolio(id);
-    console.log(deleted);
-    const newArr = [...portf]
-    newArr.splice(index, 1)
-    setPortf(newArr);
-  }
+  const [ createPortfolio ] = useCreatePortfolio();
 
+  const portfolios = data && data.portfolios || [];
   return (
     <Layout>
       <div className="container">
@@ -45,7 +34,7 @@ const Portfolios = ({portfolios}) => {
         <section className="pb-5">
           <div className="row">
             {
-              portf.map(e => (
+              portfolios.map(e => (
                 <div key={e._id} className="col-md-4">
                   <div className="card subtle-shadow no-border">
                     <Link href={`portfolios/${e._id}`}>
@@ -60,10 +49,14 @@ const Portfolios = ({portfolios}) => {
                         </div>
                       </div>
                     </Link>
-                    <button className="btn btn-primary"onClick={() => updatePortfolio(e._id)}>
+                    <button 
+                      className="btn btn-primary" 
+                      onClick={() => updatePortfolio({variables: {id: e._id}})}>
                       Update
                     </button>
-                    <button className="btn btn-danger"onClick={() => deletePortfolio(e._id)}>
+                    <button 
+                      className="btn btn-danger"
+                      onClick={() => deletePortfolio({variables: {id: e._id}})}>
                       Delete
                     </button>
                   </div>
@@ -78,104 +71,4 @@ const Portfolios = ({portfolios}) => {
   );
 };
 
-const fetchDeletePortfolio = (id) => {
-  const query = `mutation DeletePortfolio{
-    deletePortfolio (id: "${id}") { 
-      _id
-      title
-      company 
-      description
-      companyWebsite
-      location
-      jobTitle
-      startDate
-      endDate
-    }
-}`;
-  return axios.post( 'http://localhost:3000/graphql', { query } )
-    .then(({data: graph}) => graph.data)
-    .then(data => data.deletePortfolio)
-}
-
-const fetchUpdatePortfolio = (id) => {
-  const query = `mutation UpdatePortfolio{
-  
-    updatePortfolio (id: "${id}" input: { 
-      title: "Update New Job"
-      company: "Update New Job"
-      description: "Update New Job"
-      companyWebsite: "Update New Job"
-      location: "Update New Job"
-      jobTitle: "Update New Job"
-      startDate: "12/12/2012"
-      endDate: "14/11/2013"
-    }) { 
-      _id
-      title
-      company 
-      description
-      companyWebsite
-      location
-      jobTitle
-      startDate
-      endDate
-    }
-  
-}`;
-  return axios.post( 'http://localhost:3000/graphql', { query } )
-    .then(({data: graph}) => graph.data)
-    .then(data => data.updatePortfolio)
-}
-
-const fetchCreatePortfolio = () => {
-  const query = `mutation CreatePortfolio{ 
-    createPortfolio (input: { 
-      title: "New Job"
-      company: "New Job"
-      description: "New Job"
-      companyWebsite: "New Job"
-      location: "New Job"
-      jobTitle: "New Job"
-      startDate: "12/12/2012"
-      endDate: "14/11/2013"
-    }) { 
-      _id
-      title
-      company 
-      description
-      companyWebsite
-      location
-      jobTitle
-      startDate
-      endDate
-    } 
-  }`;
-  return axios.post( 'http://localhost:3000/graphql', { query } )
-    .then(({data: graph}) => graph.data)
-    .then(data => data.createPortfolio)
-}
-
-const fetchPortfolios = () => {
-  const query = `{ 
-    portfolios { 
-      _id
-      title
-      company 
-      description
-      companyWebsite
-      location
-      jobTitle
-      startDate
-      endDate
-    } 
-  }`;
-  return axios.post( 'http://localhost:3000/graphql', { query } )
-  .then(({data: graph}) => graph.data)
-}
-
-Portfolios.getInitialProps = async () => {
-  const data = await fetchPortfolios();
-  return { ...data }
-}
-
-export default Portfolios;
+export default withApollo(Portfolios, { getDataFromTree });

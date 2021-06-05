@@ -12,7 +12,6 @@ module.exports = class Portfolio {
   }
 
   getAll() {
-    
     return this._model.find();
   }
 

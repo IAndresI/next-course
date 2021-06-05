@@ -3,7 +3,8 @@ const FakeDB = require('./fakeDB');
 
 mongoose.connect("mongodb+srv://andre:70985401@portfolio.xzrsm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useCreateIndex: true
 }, async () => {
   console.log("populating DB.........");
   await FakeDB.populate();

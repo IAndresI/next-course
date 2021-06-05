@@ -9,6 +9,17 @@ const portfolioFields = `
   endDate: String
 `
 
+const userFields = `
+  name: String
+  avatar: String
+  email: String!
+  userName: String!
+  password: String!
+  passwordConfirmation: String!
+  info: String!
+  createdAt: String
+  role: String
+`
 exports.portfolioTypes = `
   type Portfolio {
     _id: ID!
@@ -17,5 +28,21 @@ exports.portfolioTypes = `
 
   input PortfolioInput {
     ${portfolioFields}
+  }
+`
+
+exports.userTypes = `
+  type User {
+    _id: ID!
+    ${userFields}
+  }
+
+  input SignUpInput {
+    ${userFields}
+  }
+
+  input SignInInput {
+    email: String!
+    password: String!
   }
 `

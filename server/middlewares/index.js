@@ -1,9 +1,9 @@
 const session = require('express-session');
 const passport = require('passport');
-const {init} = require('./passport');
 
 exports.init = (server, db) => {
-  init(passport);
+  
+  require('./passport').init(passport);
   const mySession = {
     name: 'portfolio-session',
     secret: process.env.SESSION_SECRET,
@@ -12,6 +12,7 @@ exports.init = (server, db) => {
     saveUninitialized: false,
     store: db.initSessionStore()
   }
-
   server.use(session(mySession))
+  server.use(passport.initialize())
+  server.use(passport.session())
 }

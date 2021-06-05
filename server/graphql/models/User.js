@@ -20,7 +20,13 @@ module.exports = class User {
     }
   }
 
-  async signOut() {
-    return "sign Out"
+  async signOut(ctx) {
+    try {
+      ctx.logout();
+      return true
+    }
+    catch(e) {
+      return false
+    }
   }
 }

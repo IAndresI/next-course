@@ -32,6 +32,6 @@ exports.userMutation = {
     return user
   },
   signOut: (root, args, ctx) => {
-    return ctx.models.User.signOut();
+    return ctx.models.User.signOut(ctx);
   },
 }

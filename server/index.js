@@ -7,25 +7,23 @@ const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
-console.log(process.env.asd);
-
 app.prepare().then(() => {
 
   // express
   const server = express()
 
-  //apolloGraphQL
-  const apolloServer = require('./graphql').createApolloServer();
-  apolloServer.applyMiddleware({app: server})
-
-  //MongoDB
+  // MongoDB
   const db = require('./database');
   db.connect();
 
   //session
   require('./middlewares').init(server, db)
 
-  //listen
+  // apolloGraphQL
+  const apolloServer = require('./graphql').createApolloServer();
+  apolloServer.applyMiddleware({app: server})
+
+  // listen
   server.all('*', (req, res) => {
     return handle(req, res)
   })

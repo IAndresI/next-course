@@ -98,3 +98,28 @@ export const CREATE_PORTFOLIO = gql`
   }
 `;
 
+
+// REGISTER
+
+export const SIGN_UP = gql`
+mutation SignUp(
+  $avatar: String
+  $username: String!
+  $email: String!
+  $password: String!
+  $repassword: String!
+) {
+  signUp(input: {
+    avatar: $avatar
+    userName: $username
+    email: $email
+    password: $password
+    passwordConfirmation: $repassword
+    info: "asdasd"
+    name: "AndresTests"
+  }) {
+    _id
+  }
+}
+`
+

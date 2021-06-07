@@ -33,14 +33,13 @@ const Header = () => {
             </Nav>
             <Nav className="ml-auto">
               <li className="nav-item mr-3">
-                <Link href="/register">
-                  <a className="nav-link">Sign Up</a>
+                <Link href="/login">
+                  <a className="nav-link btn">Sign In</a>
                 </Link>
-
               </li>
               <li className="nav-item mr-3">
-                <Link href="/login">
-                  <a className="nav-link btn btn-success bg-green-2 bright">Sign In</a>
+                <Link href="/register">
+                  <a className="nav-link btn btn-success bg-green-2 bright">Sign Up</a>
                 </Link>
               </li>
             </Nav>

@@ -1,5 +1,15 @@
-import {useMutation, useQuery} from '@apollo/client';
-import {GET_ALL_PORTFOLIOS, UPDATE_PORTFOLIO, DELETE_PORTFOLIO, CREATE_PORTFOLIO, GET_PORTFOLIO, SIGN_UP} from '../queries';
+import {useLazyQuery, useMutation, useQuery} from '@apollo/client';
+import {
+  GET_ALL_PORTFOLIOS, 
+  UPDATE_PORTFOLIO, 
+  DELETE_PORTFOLIO, 
+  CREATE_PORTFOLIO, 
+  GET_PORTFOLIO, 
+  SIGN_UP, 
+  SIGN_IN, 
+  GET_AUTH_USER,
+  LOG_OUT
+} from '../queries';
 
 export const useGetAllPortfolio = () => useQuery(GET_ALL_PORTFOLIOS);
 
@@ -36,3 +46,20 @@ export const useRegister = () => useMutation(SIGN_UP, {update(cache, {data : {si
   })
 }
 });
+
+// LOGIN
+
+export const useLogin = () => useMutation(SIGN_IN, {update(cache, {data: {signIn: signedInUser}}) {
+  cache.writeQuery({
+    query: GET_AUTH_USER,
+    data: {user: signedInUser}
+  })
+}})
+
+// GET AUTH USER
+
+export const useLazyGetAuthUser = () => useLazyQuery(GET_AUTH_USER)
+
+// LOG OUT
+
+export const useLazyLogOut = () => useMutation(LOG_OUT)

@@ -6,8 +6,12 @@ module.exports = class User {
 
   async signUp(signUpData) {
     if (signUpData.password !== signUpData.passwordConfirmation) throw new Error('Password must the same as confirmation password!')
-    
-    return this._model.create(signUpData)
+    try {
+      return await this._model.create(signUpData)
+    }
+    catch(err) {
+      throw new Error(`${err.code != 11000 ? err.message : "User with this email already exists!"}`)
+    }
   }
 
   async signIn(signInData, ctx) {
@@ -28,5 +32,10 @@ module.exports = class User {
     catch(e) {
       return false
     }
+  }
+
+  async getAuthUser(ctx) {
+    if(ctx.isAuthenticated()) return await ctx.getUser();
+    return null;
   }
 }

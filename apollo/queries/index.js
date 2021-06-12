@@ -123,3 +123,42 @@ mutation SignUp(
 }
 `
 
+// LOGIN
+
+export const SIGN_IN = gql`
+mutation SignIn(
+  $email: String!
+  $password: String!
+) {
+  signIn(input: {
+    email: $email, 
+    password: $password
+  }) {
+    _id
+    userName
+    role
+    avatar
+  }
+}
+`
+
+// GET USER
+
+export const GET_AUTH_USER = gql`
+query GetAuthUser{
+  user {
+    _id
+    userName
+    role
+    avatar
+  }
+}
+`
+
+// LOG OUT
+
+export const LOG_OUT = gql`
+mutation LogOut{
+  signOut
+}
+`

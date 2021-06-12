@@ -3,16 +3,18 @@ import withApollo from '../hoc/withApollo';
 import { SIGN_UP } from '../apollo/queries';
 import { useMutation } from '@apollo/client';
 import RegisterForm from '../components/forms/registerForm';
-import { useEffect } from 'react';
+import { useRouter } from 'next/dist/client/router';
 
 
 const Register = () => {
   const [signUp, {data, loading, error}] = useMutation(SIGN_UP)
+  const router  = useRouter();
 
-  useEffect(() => {
-    return () => {
-    }
-  }, [data])
+  if(data && data.signUp) router.push('/login')
+  else {
+    console.log(error?.graphQLErrors);
+    console.log(error?.graphQLErrors?.[0]?.message);
+  }
 
   return (
     <Layout>
@@ -28,14 +30,16 @@ const Register = () => {
           <div className="row">
             <div className="col-md-5 mx-auto">
               <h1 className="page-title">Register</h1>
-              {loading ? "LOading...":""}
-              {error ? error.message:""}
-              <RegisterForm onSubmit={(registerData) => {
-                console.log(registerData);
-                signUp({ variables: { avatar: registerData.avatar, username: registerData.username, email: registerData.email, password: registerData.password, repassword: registerData.repassword} });
-                console.log(data);
+              {loading ? "Loading...":""}
+              {error ? <div className="alert alert-danger">{error.message}</div> : ""}
+              <RegisterForm loading={loading} onSubmit={(registerData) => {
+                signUp({ variables: { 
+                  avatar: registerData.avatar, 
+                  username: registerData.username, 
+                  email: registerData.email, 
+                  password: registerData.password, 
+                  repassword: registerData.repassword} });
               }} />
-              {data?._id}
             </div>
           </div>
         </div>

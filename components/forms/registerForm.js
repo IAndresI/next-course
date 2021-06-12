@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-const RegisterForm = ({onSubmit}) => {
+const RegisterForm = ({onSubmit, loading}) => {
 
   const {register, handleSubmit, formState: {errors}} = useForm()
 
@@ -17,7 +17,7 @@ const RegisterForm = ({onSubmit}) => {
           {...register('avatar')} />
       </div>
       <div className="form-group">
-        <label htmlFor="email">User Name</label>
+        <label style={{color: errors.username ? "red" : ""}} htmlFor="email">User Name</label>
         <input
           type="text"
           className="form-control"
@@ -26,7 +26,7 @@ const RegisterForm = ({onSubmit}) => {
           {...register('username', { required: true })} />
       </div>
       <div className="form-group">
-        <label htmlFor="email">Email</label>
+        <label style={{color: errors.email ? "red" : ""}} htmlFor="email">Email</label>
         <input
           type="email"
           className="form-control"
@@ -35,7 +35,7 @@ const RegisterForm = ({onSubmit}) => {
           {...register('email',{ required: true })} />
       </div>
       <div className="form-group">
-        <label htmlFor="password">Password</label>
+        <label style={{color: errors.password ? "red" : ""}} htmlFor="password">Password</label>
         <input
           type="password"
           className="form-control"
@@ -44,7 +44,7 @@ const RegisterForm = ({onSubmit}) => {
           {...register('password', { required: true })} />
       </div>
       <div className="form-group">
-        <label htmlFor="repassword">Repassword</label>
+        <label style={{color: errors.repassword ? "red" : ""}} htmlFor="repassword">Repassword</label>
         <input
           type="password"
           className="form-control"
@@ -52,10 +52,9 @@ const RegisterForm = ({onSubmit}) => {
           name="repassowrd"
           {...register('repassword', { required: true })} />
       </div>
-      {errors.repassword && <p>repassowrd is required.</p>}
       <button
         type="submit"
-        className="btn btn-primary bg-blue py-2 ttu">Submit</button>
+        className="btn btn-primary bg-blue py-2 ttu" disabled={!!loading}>{loading ? "Loading..." : "Submit"}</button>
     </form>
   );
 };

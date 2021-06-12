@@ -22,6 +22,14 @@ exports.portfolioMutation = {
   }
 }
 
+// User
+
+exports.userQueries = {
+  user: async (root, args, ctx) => {
+    return ctx.models.User.getAuthUser(ctx);
+  }
+}
+
 exports.userMutation = {
   signUp: async (root, {input}, ctx) => {
     const registred = await ctx.models.User.signUp(input)
